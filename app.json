@@ -18,14 +18,21 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/its-decision-time.android.png",
+        "foregroundImage": "./assets/appIcon.png",
         "backgroundColor": "#90EE90"
       },
       "package": "com.yourcompany.rtrchoose"
     },
-    "web": {
-      "favicon": "./assets/its-decision-time.android.png"
+    "extra": {
+      "eas": {
+        "projectId": "03039e3b-00f9-46ca-8013-d6a589aba8c2"
+      }
+    },
+    "cli": {
+      "appVersionSource": "remote"
     }
   }
 }
+
+
 
