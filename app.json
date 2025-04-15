@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "RTRChoose",
+    "slug": "RTRChoose",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/appIcon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#90EE90"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.rtrchoose"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/its-decision-time.android.png",
+        "backgroundColor": "#90EE90"
+      },
+      "package": "com.yourcompany.rtrchoose"
+    },
+    "web": {
+      "favicon": "./assets/its-decision-time.android.png"
+    }
+  }
+}
+
