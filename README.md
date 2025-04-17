@@ -4,7 +4,9 @@
 
 **注意：这只是一个学习项目的作业，不要浪费时间阅读README并下载它。APK安装包已经附在文件夹里（一级目录中可以找到RTRchoose.apk）。**
 
-**Note: This is just a learning project, don't waste time reading the README and download it. The APK installation package is already attached to the folder (RTRchoose.apk can be found in the first-level directory). **
+Note: This is just a learning project assignment. People who are not related to this course please do not waste time reading the README and downloading it. 
+
+The APK installation package has been attached to the folder (RTRchoose.apk can be found in the first-level directory).
 
 A React Native mobile application that helps groups decide where to eat.
 

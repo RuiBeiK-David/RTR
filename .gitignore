@@ -34,3 +34,15 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# IDE
+.idea/
+.vscode/
+
+# We want to include the APK in the repository
+# android/app/build/
+# But exclude other build files
+android/app/build/intermediates/
+android/app/build/tmp/
+android/.gradle/
+android/.cxx/
