@@ -156,15 +156,15 @@ class PreloadDataService {
     static async initializeDefaultData() {
         try {
             console.log('Starting data initialization...');
-            
-            // 检查现有数据
+
+            // 检查现有数据 (Check existing data)
             const existingPeople = await StorageService.getPeople();
             console.log('Existing people count:', existingPeople.length);
-            
+
             const existingRestaurants = await StorageService.getRestaurants();
             console.log('Existing restaurants count:', existingRestaurants.length);
 
-            // 如果没有数据，则预加载
+            // 如果没有数据，则预加载 (If no data exists, preload it)
             if (existingPeople.length === 0) {
                 console.log('Loading default people data...');
                 const peopleResult = await StorageService.savePeople(preloadedPeople);
@@ -177,10 +177,10 @@ class PreloadDataService {
                 console.log('Restaurants preload result:', restaurantsResult);
             }
 
-            // 验证数据是否已加载
+            // 验证数据是否已加载 (Verify if data has been loaded)
             const finalPeople = await StorageService.getPeople();
             const finalRestaurants = await StorageService.getRestaurants();
-            
+
             console.log('Final data check - People:', finalPeople.length);
             console.log('Final data check - Restaurants:', finalRestaurants.length);
 

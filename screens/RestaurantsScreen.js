@@ -61,7 +61,7 @@ class ListScreen extends React.Component {
     resetToDefault = async () => {
         try {
             await PreloadDataService.resetToDefault();
-            this.loadRestaurants(); // 重新加载数据
+            this.loadRestaurants(); // 重新加载数据 (Reload data)
         } catch (error) {
             console.error('Reset failed:', error);
             Alert.alert('Error', 'Failed to reset data');
@@ -143,7 +143,7 @@ class AddScreen extends React.Component {
         key: `r_${new Date().getTime()}`
     };
 
-    // 验证函数
+    // 验证函数 (Validation functions)
     validateName = (name) => {
         const nameRegex = /^[a-zA-Z\u4e00-\u9fa5]([a-zA-Z\u4e00-\u9fa5\s\.,'-]*[a-zA-Z\u4e00-\u9fa5])?$/;
         if (!name || !name.trim()) {
@@ -161,7 +161,7 @@ class AddScreen extends React.Component {
     validatePhone = (phone) => {
         const phoneRegex = /^(\+?7|8)?[-\s]?\(?([0-9]{3})\)?[-\s]?([0-9]{3})[-\s]?([0-9]{2})[-\s]?([0-9]{2})$/;
         const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
-        
+
         if (!phone || !phone.trim()) {
             return 'Phone number is required';
         }
@@ -176,7 +176,7 @@ class AddScreen extends React.Component {
 
     validateAddress = (address) => {
         const addressRegex = /^\d+\s+[a-zA-Z\u4e00-\u9fa5]/;
-        
+
         if (!address || !address.trim()) {
             return 'Address is required';
         }
@@ -194,7 +194,7 @@ class AddScreen extends React.Component {
 
     validateWebsite = (website) => {
         const urlRegex = /^https?:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z]{2,})+([\/\w-]*)*\/?$/;
-        
+
         if (!website || !website.trim()) {
             return 'Website URL is required';
         }
@@ -208,20 +208,20 @@ class AddScreen extends React.Component {
     };
 
     handleInputChange = (field, value) => {
-        // 立即更新字段值
+        // 立即更新字段值 (Update field value immediately)
         this.setState(prevState => ({
             [field]: value,
             errors: {
                 ...prevState.errors,
-                [field]: ''  // 清除相应字段的错误
+                [field]: ''  // 清除相应字段的错误 (Clear error for the corresponding field)
             }
         }));
     };
 
     validateForm = () => {
         const { name, phoneNumber, address, website, cuisine } = this.state;
-        
-        // 执行所有验证
+
+        // 执行所有验证 (Perform all validations)
         const errors = {
             name: this.validateName(name),
             phoneNumber: this.validatePhone(phoneNumber),
@@ -230,10 +230,10 @@ class AddScreen extends React.Component {
             cuisine: cuisine.length === 0 ? 'Please select at least one cuisine type' : ''
         };
 
-        // 更新错误状态
+        // 更新错误状态 (Update error state)
         this.setState({ errors });
 
-        // 检查是否有任何错误
+        // 检查是否有任何错误 (Check if there are any errors)
         return !Object.values(errors).some(error => error !== '');
     };
 
@@ -241,7 +241,7 @@ class AddScreen extends React.Component {
         if (!this.validateForm()) {
             const firstError = Object.entries(this.state.errors)
                 .find(([_, value]) => value !== '');
-            
+
             if (firstError) {
                 Alert.alert(
                     "Validation Error",
@@ -304,7 +304,7 @@ class AddScreen extends React.Component {
                 <Text style={styles.label}>Cuisine Types (Select Multiple)</Text>
                 <ScrollView style={styles.checkboxContainer}>
                     {[
-                        "American", "Chinese", "Italian", "Japanese", "Mexican", 
+                        "American", "Chinese", "Italian", "Japanese", "Mexican",
                         "Thai", "Indian", "Korean", "Mediterranean", "French", "Russian"
                     ].map(cuisineType => (
                         <TouchableOpacity
@@ -334,9 +334,11 @@ class AddScreen extends React.Component {
                         selectedValue={this.state.rating}
                         onValueChange={(value) => this.setState({ rating: value })}
                         style={styles.picker}
+                        mode="dropdown"
+                        dropdownIconColor="#000"
                     >
                         {[1,2,3,4,5].map(num => (
-                            <Picker.Item key={num} label={`${num} Stars`} value={String(num)} />
+                            <Picker.Item key={num} label={`${num} Stars`} value={String(num)} color="#000" />
                         ))}
                     </Picker>
                 </View>
@@ -437,7 +439,18 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     pickerContainer: {
-        marginBottom: 15
+        marginBottom: 15,
+        marginHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#c0c0c0',
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        overflow: 'hidden', // 确保内容不会溢出容器 (Ensure content doesn't overflow the container)
+    },
+    picker: {
+        height: 50,
+        width: '100%', // 确保宽度填满容器 (Ensure width fills the container)
+        color: '#000', // 确保文本颜色可见 (Ensure text color is visible)
     },
     priceRangeContainer: {
         flexDirection: 'row',

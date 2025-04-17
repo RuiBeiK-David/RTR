@@ -3,10 +3,10 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, FlatList, Scrol
 import CustomButton from '../components/CustomButton';
 import StorageService from '../services/StorageService';
 
-// 主决策屏幕组件
+// 主决策屏幕组件 (Main decision screen component)
 class DecisionScreen extends React.Component {
     state = {
-        currentScreen: 'decision-time', // 'decision-time', 'who-going', 'restaurant-filter', 'restaurant-choice', 'enjoy-meal'
+        currentScreen: 'decision-time', // 'decision-time', 'who-going', 'restaurant-filter', 'restaurant-choice', 'enjoy-meal' (Screen states)
         selectedPeople: [],
         selectedRestaurant: null,
         showRestaurantCard: false,
@@ -16,7 +16,7 @@ class DecisionScreen extends React.Component {
         filteredRestaurants: [],
         selectedCuisines: [],
         votes: [],
-        currentRestaurantIndex: 0  // 新添加的状态
+        currentRestaurantIndex: 0  // 新添加的状态 (Newly added state)
     };
 
     componentDidMount() {
@@ -24,7 +24,7 @@ class DecisionScreen extends React.Component {
     }
 
     componentDidUpdate(_, prevState) {
-        // 当切换到restaurant-choice屏幕时，确保有filteredRestaurants
+        // 当切换到restaurant-choice屏幕时，确保有filteredRestaurants (When switching to restaurant-choice screen, ensure filteredRestaurants exists)
         if (prevState.currentScreen !== 'restaurant-choice' &&
             this.state.currentScreen === 'restaurant-choice') {
 
@@ -58,14 +58,14 @@ class DecisionScreen extends React.Component {
         }
     };
 
-    // 处理屏幕点击，进入选择用餐者界面
+    // 处理屏幕点击，进入选择用餐者界面 (Handle screen press, enter diner selection interface)
     handleScreenPress = () => {
         if (this.state.currentScreen === 'decision-time') {
             this.setState({ currentScreen: 'who-going' });
         }
     };
 
-    // 选择/取消选择用餐者
+    // 选择/取消选择用餐者 (Select/deselect diners)
     togglePersonSelection = (person) => {
         const { selectedPeople } = this.state;
         const isSelected = selectedPeople.find(p => p.key === person.key);
@@ -77,7 +77,7 @@ class DecisionScreen extends React.Component {
         });
     };
 
-    // 进入餐厅筛选界面
+    // 进入餐厅筛选界面 (Enter restaurant filter interface)
     proceedToRestaurantFilter = () => {
         if (this.state.selectedPeople.length > 0) {
             this.setState({
@@ -89,7 +89,7 @@ class DecisionScreen extends React.Component {
         }
     };
 
-    // 进入餐厅选择界面
+    // 进入餐厅选择界面 (Enter restaurant selection interface)
     proceedToRestaurantChoice = () => {
         let filteredRestaurants = this.filterRestaurants();
 
@@ -106,11 +106,11 @@ class DecisionScreen extends React.Component {
             filteredRestaurants,
             currentVoterIndex: 0,
             votes: [],
-            currentRestaurantIndex: 0  // 重置索引
+            currentRestaurantIndex: 0  // 重置索引 (Reset index)
         });
     };
 
-    // 切换菜系选择
+    // 切换菜系选择 (Toggle cuisine selection)
     toggleCuisineSelection = (cuisine) => {
         const { selectedCuisines } = this.state;
         const isSelected = selectedCuisines.includes(cuisine);
@@ -122,7 +122,7 @@ class DecisionScreen extends React.Component {
         });
     };
 
-    // 根据所选菜系筛选餐厅
+    // 根据所选菜系筛选餐厅 (Filter restaurants based on selected cuisines)
     filterRestaurants = () => {
         const { restaurants, selectedCuisines } = this.state;
 
@@ -130,20 +130,20 @@ class DecisionScreen extends React.Component {
             return restaurants;
         }
 
-        // 首先筛选出至少匹配一个所选菜系的餐厅
+        // 首先筛选出至少匹配一个所选菜系的餐厅 (First filter out restaurants that match at least one selected cuisine)
         const matchingRestaurants = restaurants.filter(restaurant => {
-            // 确保cuisine总是数组
-            const restaurantCuisines = Array.isArray(restaurant.cuisine) 
-                ? restaurant.cuisine 
+            // 确保cuisine总是数组 (Ensure cuisine is always an array)
+            const restaurantCuisines = Array.isArray(restaurant.cuisine)
+                ? restaurant.cuisine
                 : [restaurant.cuisine];
-            
-            // 标准化处理，确保大小写一致
-            const normalizedRestaurantCuisines = restaurantCuisines.map(c => 
+
+            // 标准化处理，确保大小写一致 (Standardize processing, ensure case consistency)
+            const normalizedRestaurantCuisines = restaurantCuisines.map(c =>
                 typeof c === 'string' ? c.trim() : c
             );
-            
-            // 检查是否至少有一个菜系匹配
-            return selectedCuisines.some(selectedCuisine => 
+
+            // 检查是否至少有一个菜系匹配 (Check if at least one cuisine matches)
+            return selectedCuisines.some(selectedCuisine =>
                 normalizedRestaurantCuisines.includes(selectedCuisine)
             );
         });
@@ -152,7 +152,7 @@ class DecisionScreen extends React.Component {
             return [];
         }
 
-        // 对匹配的餐厅进行排序，匹配菜系数量多的排在前面
+        // 对匹配的餐厅进行排序，匹配菜系数量多的排在前面 (Sort matching restaurants, those with more matching cuisines come first)
         return matchingRestaurants.sort((a, b) => {
             const aCuisines = Array.isArray(a.cuisine) ? a.cuisine : [a.cuisine];
             const bCuisines = Array.isArray(b.cuisine) ? b.cuisine : [b.cuisine];
@@ -160,11 +160,11 @@ class DecisionScreen extends React.Component {
             const aMatches = selectedCuisines.filter(c => aCuisines.includes(c)).length;
             const bMatches = selectedCuisines.filter(c => bCuisines.includes(c)).length;
 
-            return bMatches - aMatches; // 降序排列，匹配多的在前
+            return bMatches - aMatches; // 降序排列，匹配多的在前 (Descending order, more matches come first)
         });
     };
 
-    // 选择下一个餐厅
+    // 选择下一个餐厅 (Select next restaurant)
     selectNextRestaurant = () => {
         const { filteredRestaurants, currentRestaurantIndex } = this.state;
 
@@ -178,18 +178,18 @@ class DecisionScreen extends React.Component {
                         onPress: () => this.restartProcess()
                     }
                 ],
-                { cancelable: false }  // 用户必须点击确认
+                { cancelable: false }  // 用户必须点击确认 (User must click confirm)
             );
             return;
         }
 
-        // 如果已经到达列表末尾，重新从头开始
-        const nextIndex = currentRestaurantIndex >= filteredRestaurants.length - 1 
-            ? 0 
+        // 如果已经到达列表末尾，重新从头开始 (If reached the end of the list, start over from the beginning)
+        const nextIndex = currentRestaurantIndex >= filteredRestaurants.length - 1
+            ? 0
             : currentRestaurantIndex + 1;
-        
+
         const selected = filteredRestaurants[currentRestaurantIndex];
-        
+
         console.log('Selected restaurant:', selected.name,
             'with cuisines:', Array.isArray(selected.cuisine) ? selected.cuisine : [selected.cuisine],
             `(${currentRestaurantIndex + 1}/${filteredRestaurants.length})`);
@@ -203,7 +203,7 @@ class DecisionScreen extends React.Component {
         });
     };
 
-    // 添加返回餐厅筛选界面的方法
+    // 添加返回餐厅筛选界面的方法 (Add method to return to restaurant filter interface)
     returnToRestaurantFilter = () => {
         this.setState({
             currentScreen: 'restaurant-filter',
@@ -212,28 +212,28 @@ class DecisionScreen extends React.Component {
             votes: [],
             currentRestaurantIndex: 0,
             filteredRestaurants: [],
-            // 保留已选择的人员，但清空菜系选择
+            // 保留已选择的人员，但清空菜系选择 (Keep selected people, but clear cuisine selection)
             selectedCuisines: []
         });
     };
 
-    // 处理投票
+    // 处理投票 (Handle voting)
     handleVote = (accepted) => {
-        const { 
-            selectedPeople, 
-            currentVoterIndex, 
-            votes, 
+        const {
+            selectedPeople,
+            currentVoterIndex,
+            votes,
             filteredRestaurants,
-            selectedRestaurant 
+            selectedRestaurant
         } = this.state;
 
         if (!accepted) {
-            // 从筛选列表中移除被拒绝的餐厅
+            // 从筛选列表中移除被拒绝的餐厅 (Remove rejected restaurant from filtered list)
             const updatedRestaurants = filteredRestaurants.filter(
                 r => r.key !== selectedRestaurant.key
             );
 
-            // 检查是否还有剩余餐厅
+            // 检查是否还有剩余餐厅 (Check if there are any restaurants left)
             if (updatedRestaurants.length === 0) {
                 this.setState({
                     showRestaurantCard: false,
@@ -258,7 +258,7 @@ class DecisionScreen extends React.Component {
                 return;
             }
 
-            // 更新状态并选择下一个餐厅
+            // 更新状态并选择下一个餐厅 (Update state and select next restaurant)
             this.setState({
                 filteredRestaurants: updatedRestaurants,
                 showRestaurantCard: false,
@@ -266,7 +266,7 @@ class DecisionScreen extends React.Component {
                 votes: [],
                 currentRestaurantIndex: 0
             }, () => {
-                // 确保状态更新后再选择下一个餐厅
+                // 确保状态更新后再选择下一个餐厅 (Ensure state is updated before selecting next restaurant)
                 setTimeout(() => {
                     this.selectNextRestaurant();
                 }, 0);
@@ -274,27 +274,27 @@ class DecisionScreen extends React.Component {
             return;
         }
 
-        // 处理接受投票的情况
+        // 处理接受投票的情况 (Handle the case of accepting vote)
         const newVotes = [...votes, accepted];
 
         if (currentVoterIndex + 1 < selectedPeople.length) {
-            // 还有人需要投票
+            // 还有人需要投票 (More people need to vote)
             this.setState({
                 currentVoterIndex: currentVoterIndex + 1,
                 votes: newVotes
             });
         } else if (newVotes.every(vote => vote === true)) {
-            // 所有人都同意
+            // 所有人都同意 (Everyone agrees)
             this.setState({
                 currentScreen: 'enjoy-meal',
                 showRestaurantCard: false
             });
         } else {
-            // 如果有人投反对票，移除当前餐厅并继续
+            // 如果有人投反对票，移除当前餐厅并继续 (If someone votes against, remove current restaurant and continue)
             const updatedRestaurants = filteredRestaurants.filter(
                 r => r.key !== selectedRestaurant.key
             );
-            
+
             if (updatedRestaurants.length === 0) {
                 this.setState({
                     showRestaurantCard: false,
@@ -329,7 +329,7 @@ class DecisionScreen extends React.Component {
         }
     };
 
-    // 重新开始
+    // 重新开始 (Restart)
     restartProcess = () => {
         this.setState({
             currentScreen: 'decision-time',
@@ -380,7 +380,7 @@ class DecisionScreen extends React.Component {
                         <Text style={styles.headerText}>Who is going?</Text>
                         <Text style={styles.progressText}>
                             Step 1: Select everyone who's joining for the meal.
-                            {selectedPeople.length > 0 
+                            {selectedPeople.length > 0
                                 ? `\nSelected: ${selectedPeople.length} ${selectedPeople.length === 1 ? 'person' : 'people'}`
                                 : '\nTip: Select at least one person to continue'}
                         </Text>
@@ -414,7 +414,7 @@ class DecisionScreen extends React.Component {
                 );
 
             case 'restaurant-filter':
-                // 获取所有可能的菜系
+                // 获取所有可能的菜系 (Get all possible cuisines)
                 const allCuisines = new Set();
                 restaurants.forEach(restaurant => {
                     if (Array.isArray(restaurant.cuisine)) {
@@ -446,7 +446,7 @@ class DecisionScreen extends React.Component {
 
                         <Text style={styles.filterExplanation}>
                             Restaurants will be sorted by how many of your selected cuisines they offer.
-                            {selectedCuisines.length > 0 
+                            {selectedCuisines.length > 0
                                 ? `\nYou've selected ${selectedCuisines.length} cuisine type${selectedCuisines.length > 1 ? 's' : ''}.`
                                 : '\nTip: Selecting no cuisines will show all restaurants.'}
                         </Text>
@@ -463,14 +463,14 @@ class DecisionScreen extends React.Component {
             case 'restaurant-choice':
                 const totalVoters = selectedPeople.length;
                 const remainingVoters = totalVoters - currentVoterIndex;
-                
+
                 return (
                     <View style={styles.screenContainer}>
                         <Text style={styles.headerText}>Restaurant Choice</Text>
                         <Text style={styles.progressText}>
                             Step 3: Time to vote! Each person gets a turn to accept or reject the suggestion.
                         </Text>
-                        
+
                         {!showRestaurantCard && filteredRestaurants.length === 0 ? (
                             <View style={styles.emptyStateContainer}>
                                 <Text style={styles.emptyStateText}>
@@ -504,7 +504,7 @@ class DecisionScreen extends React.Component {
                                 />
                             </View>
                         ) : null}
-                        
+
                         {showRestaurantCard && selectedRestaurant && (
                             <Modal
                                 visible={true}
@@ -540,7 +540,7 @@ class DecisionScreen extends React.Component {
                                             </Text>
                                         </Text>
                                         <Text style={styles.votingProgress}>
-                                            {remainingVoters > 1 
+                                            {remainingVoters > 1
                                                 ? `${remainingVoters} people still need to vote`
                                                 : remainingVoters === 1
                                                     ? "Last vote needed!"

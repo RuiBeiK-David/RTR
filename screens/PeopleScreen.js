@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Text, FlatList, Alert, Picker } from "react-native";
+import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import { GluestackUIProvider } from '@gluestack-ui/themed-native-base';
 import DeleteButton from '../components/DeleteButton';
 import CustomButton from "../components/CustomButton";
@@ -31,19 +32,19 @@ class ListScreen extends React.Component {
     deletePerson = async (item) => {
         try {
             console.log('Starting delete operation for person:', item.firstName);
-            // 直接从当前状态获取最新数据
+            // 直接从当前状态获取最新数据 (Get the latest data directly from current state)
             const currentList = await StorageService.getPeople();
             console.log('Current people count:', currentList.length);
 
             const newList = currentList.filter(person => person.key !== item.key);
             console.log('New people count after filter:', newList.length);
 
-            // 保存新列表
+            // 保存新列表 (Save the new list)
             const success = await StorageService.savePeople(newList);
             console.log('Save operation success:', success);
 
             if (success) {
-                // 更新状态
+                // 更新状态 (Update state)
                 this.setState({ listData: newList }, () => {
                     console.log('State updated, new list length:', this.state.listData.length);
                 });
@@ -115,7 +116,7 @@ class AddScreen extends React.Component {
 
     validateName = (name, fieldName) => {
         const nameRegex = /^[a-zA-Z\u4e00-\u9fa5]([a-zA-Z\u4e00-\u9fa5\s'-]*[a-zA-Z\u4e00-\u9fa5])?$/;
-        
+
         if (!name || !name.trim()) {
             return `${fieldName} is required`;
         }
@@ -140,7 +141,7 @@ class AddScreen extends React.Component {
 
     validateForm = () => {
         const { firstName, lastName, relationship } = this.state;
-        
+
         const errors = {
             firstName: this.validateName(firstName, 'First name'),
             lastName: this.validateName(lastName, 'Last name'),
@@ -156,7 +157,7 @@ class AddScreen extends React.Component {
         if (!this.validateForm()) {
             const firstError = Object.entries(this.state.errors)
                 .find(([_, value]) => value !== '');
-            
+
             if (firstError) {
                 Alert.alert(
                     "Validation Error",
@@ -206,19 +207,22 @@ class AddScreen extends React.Component {
                         selectedValue={this.state.relationship}
                         onValueChange={(value) => this.handleInputChange('relationship', value)}
                         style={styles.picker}
+                        mode="dropdown"
+                        dropdownIconColor="#000"
                     >
                         <Picker.Item label="Select Relationship" value="" />
                         {this.relationshipOptions.map(relation => (
-                            <Picker.Item 
-                                key={relation} 
-                                label={relation} 
-                                value={relation} 
+                            <Picker.Item
+                                key={relation}
+                                label={relation}
+                                value={relation}
+                                color="#000"
                             />
                         ))}
                     </Picker>
                 </View>
-                {errors.relationship ? 
-                    <Text style={styles.errorText}>{errors.relationship}</Text> 
+                {errors.relationship ?
+                    <Text style={styles.errorText}>{errors.relationship}</Text>
                     : null}
                 <View style={styles.buttonContainer}>
                     <CustomButton
@@ -290,9 +294,12 @@ const styles = StyleSheet.create({
         borderColor: '#c0c0c0',
         borderRadius: 5,
         backgroundColor: '#fff',
+        overflow: 'hidden', // 确保内容不会溢出容器 (Ensure content doesn't overflow the container)
     },
     picker: {
         height: 50,
+        width: '100%', // 确保宽度填满容器 (Ensure width fills the container)
+        color: '#000', // 确保文本颜色可见 (Ensure text color is visible)
     },
     errorText: {
         color: 'red',
